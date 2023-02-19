@@ -6,3 +6,13 @@
   padding: 6rem;
   min-height: 100vh;
 }
+.cardInfo {
+  text-align: center;
+}
+.bannerWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  background-position: center;
+  background-size: cover; 
+}

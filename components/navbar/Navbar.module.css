@@ -1,0 +1,17 @@
+.navbar {
+  z-index: 2;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  box-shadow: var(--chakra-shadows-lg);
+}
+.menuList {
+  width: 50%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 20px;
+}
