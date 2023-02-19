@@ -17,16 +17,14 @@ export default function Home() {
 
       <Card className={styles.cardInfo}>
         <CardHeader textAlign='center'>
-          <div style={{ position: "relative", width: "100%", paddingBottom: "50%" }}>
+          <div className={styles.bannerWrapper}>
             <Image
               priority
               src="/images/dentist-banner.jpg"
               className={styles.banner}
-              // height={144}
-              // width={144}
               fill
               alt="banner"
-              style={{ objectFit: 'cover', objectPosition: 'bottom' }}
+              style={{ objectFit: 'cover', objectPosition: 'center', maxHeight: '400px' }}
             />
           </div>
         </CardHeader>
