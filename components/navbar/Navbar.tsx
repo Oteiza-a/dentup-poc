@@ -15,6 +15,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { text: 'Home', route: '/' },
   { text: 'Calendario', route: '/calendar' },
+  { text: 'Pacientes', route: '/patients' },
 ]
 
 const Navbar: React.FC<Props> = ({}) => {
