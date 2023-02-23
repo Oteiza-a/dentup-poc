@@ -40,7 +40,7 @@ const Menu = ({ items }: { items: NavItem[] }) => {
             <Link href={route}>
               <Highlight 
                 query={router.pathname === route ? text : ''} 
-                styles={{ px: '2', py: '1', rounded: 'full', bg: 'purple.100', color: 'purple.600'}}
+                styles={{ px: '2', py: '1', rounded: 'full', bg: 'blue.100', color: 'blue.600'}}
               >
                 {text}
               </Highlight>

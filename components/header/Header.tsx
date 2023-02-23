@@ -22,7 +22,7 @@ const Header: React.FC<Props> = ({ title, subtitle, backButtonText, backRoute })
         <Button 
           onClick={onGoBack}
           leftIcon={<FiArrowLeftCircle />} 
-          colorScheme='purple' 
+          colorScheme='blue' 
           mb='3' 
           variant='ghost'
         >

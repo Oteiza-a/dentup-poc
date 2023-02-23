@@ -106,7 +106,7 @@ const PatientInfoModule = () => {
         </FormControl>
       ))}
 
-      <Button mt='6' colorScheme='purple' isLoading={isSubmitting} type='submit'>
+      <Button mt='6' colorScheme='blue' isLoading={isSubmitting} type='submit'>
         Guardar
       </Button>
     </form>
@@ -125,7 +125,7 @@ const Patient = () => {
     <Layout navbar>
       <Header backButtonText='Volver' />
       <Card p='4'>
-        <Tabs variant='enclosed-colored' colorScheme='purple'>
+        <Tabs variant='enclosed-colored' colorScheme='blue'>
 
           <TabList>
             {tabs.map(({ text }) => <Tab key={text} style={{ borderRadius: '6px 6px 0px 0px' }}>{text}</Tab>)}

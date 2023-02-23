@@ -19,7 +19,7 @@ export default function Calendar() {
 
       <Card mt='6' p='6' boxShadow='lg'>
         <TableContainer>
-          <Table variant='simple' colorScheme='purple'>
+          <Table variant='simple' colorScheme='blue'>
             <TableCaption>Pacientes</TableCaption>
             <Thead>
               <Tr>
@@ -35,7 +35,7 @@ export default function Calendar() {
             <Tbody>
               {patients.map(({ id, profileImage, name, lastNames, dni, phoneNumber, email, treatments }: Patient) => (
                 <Tr key={id} onClick={() => onPatientClick(id)} className={styles.patientRow}>
-                  <Td><Avatar name={name} src={profileImage} bg='purple.400'/></Td>
+                  <Td><Avatar name={name} src={profileImage} bg='blue.400'/></Td>
                   <Td>{name}</Td>
                   <Td>{lastNames}</Td>
                   <Td>{dni}</Td>

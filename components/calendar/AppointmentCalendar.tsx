@@ -36,7 +36,7 @@ const AppointmentCalendar: React.FC<Props> = ({}) => {
         weekends={true}
         events={events}
         eventContent={renderEventContent}
-        eventColor='#9F7AEA'
+        eventColor={'#4299e1'}
       />
     </>
   );

@@ -1,7 +1,7 @@
 :root {
   /* VARS */
-  --fc-button-bg-color: var(--chakra-colors-purple-700) !important;
-  --fc-button-active-bg-color: var(--chakra-colors-purple-900) !important;
+  --fc-button-bg-color: var(--chakra-colors-blue-700) !important;
+  --fc-button-active-bg-color: var(--chakra-colors-blue-900) !important;
 
   /* --max-width: 1100px;
   --border-radius: 12px;
