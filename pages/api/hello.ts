@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { IPatient } from '@/interfaces/IPatient';
-import Patient from '@/models/Patient'
+import Patient from '@/models/patient'
 import connectMongo from '@/utils/connectMongo';
 import type { NextApiRequest, NextApiResponse } from 'next'
 

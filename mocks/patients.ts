@@ -1,6 +1,6 @@
-import { Patient } from "@/interfaces/IPatient";
+import { IPatient } from "@/interfaces/IPatient";
 
-export const patients: Patient[] = [
+export const patients: IPatient[] = [
   {
     id: '1',
     name: 'John',
