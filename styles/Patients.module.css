@@ -1,0 +1,8 @@
+.patientRow {
+  cursor: pointer;
+  background: none;
+  transition: all 0.8s;
+}
+.patientRow:hover {
+  background-color: var(--chakra-colors-purple-100);
+}

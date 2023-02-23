@@ -8,7 +8,7 @@ export default function Calendar() {
     <Layout navbar>
       <Header title="Calendario" subtitle="Agenda las horas del profesional."/>
 
-      <Box mt='8'>
+      <Box mt='6'>
         <AppointmentCalendar />
       </Box>
     </Layout>

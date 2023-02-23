@@ -3,13 +3,21 @@ import Layout from "@/components/layout/Layout";
 import { Patient } from "@/interfaces/Patient";
 import { patients } from "@/mocks/patients";
 import { Avatar, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import styles from '@/styles/Patients.module.css'
 
 export default function Calendar() {
+  const router = useRouter()
+
+  const onPatientClick = (id: string) => {
+    router.push(`/patients/${id}`)
+  } 
+
   return (
     <Layout navbar>
       <Header title="Pacientes" subtitle="Administra los pacientes."/>
 
-      <Card mt='6' p='6' boxShadow={'lg'}>
+      <Card mt='6' p='6' boxShadow='lg'>
         <TableContainer>
           <Table variant='simple' colorScheme='purple'>
             <TableCaption>Pacientes</TableCaption>
@@ -26,7 +34,7 @@ export default function Calendar() {
             </Thead>
             <Tbody>
               {patients.map(({ id, profileImage, name, lastNames, dni, phoneNumber, email, treatments }: Patient) => (
-                <Tr key={id}>
+                <Tr key={id} onClick={() => onPatientClick(id)} className={styles.patientRow}>
                   <Td><Avatar name={name} src={profileImage} bg='purple.400'/></Td>
                   <Td>{name}</Td>
                   <Td>{lastNames}</Td>

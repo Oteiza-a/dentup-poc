@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormField } from '@/interfaces/FormField';
+import Header from '@/components/header/Header';
 
 const PatientInfoModule = () => {
 
@@ -34,7 +35,6 @@ const PatientInfoModule = () => {
       label: 'Nombre',
       placeholder: 'Nombre del paciente',
     },
-    
     {
       type: 'input',
       name: 'lastNames',
@@ -123,6 +123,7 @@ const Patient = () => {
 
   return (
     <Layout navbar>
+      <Header backButtonText='Volver' />
       <Card p='4'>
         <Tabs variant='enclosed-colored' colorScheme='purple'>
 
