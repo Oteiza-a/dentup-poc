@@ -1,6 +1,6 @@
 import Header from "@/components/header/Header";
 import Layout from "@/components/layout/Layout";
-import { Patient } from "@/interfaces/Patient";
+import { IPatient } from "@/interfaces/IPatient";
 import { patients } from "@/mocks/patients";
 import { Avatar, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -33,7 +33,7 @@ export default function Calendar() {
               </Tr>
             </Thead>
             <Tbody>
-              {patients.map(({ id, profileImage, name, lastNames, dni, phoneNumber, email, treatments }: Patient) => (
+              {patients.map(({ id, profileImage, name, lastNames, dni, phoneNumber, email, treatments }: IPatient) => (
                 <Tr key={id} onClick={() => onPatientClick(id)} className={styles.patientRow}>
                   <Td><Avatar name={name} src={profileImage} bg='blue.400'/></Td>
                   <Td>{name}</Td>

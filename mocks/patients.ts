@@ -1,4 +1,4 @@
-import { Patient } from "@/interfaces/Patient";
+import { Patient } from "@/interfaces/IPatient";
 
 export const patients: Patient[] = [
   {
