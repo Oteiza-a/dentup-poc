@@ -2,7 +2,7 @@ import { IPatient } from "@/interfaces/IPatient";
 
 export const patients: IPatient[] = [
   {
-    id: '1',
+    _id: '1',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -12,7 +12,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '2',
+    _id: '2',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -22,7 +22,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '3',
+    _id: '3',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -32,7 +32,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '4',
+    _id: '4',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -42,7 +42,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '5',
+    _id: '5',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -52,7 +52,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '6',
+    _id: '6',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
@@ -62,7 +62,7 @@ export const patients: IPatient[] = [
     profileImage: '',
   },
   {
-    id: '7',
+    _id: '7',
     name: 'John',
     lastNames: 'Doe Maximus',
     treatments: 0,
