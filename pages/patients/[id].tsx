@@ -7,6 +7,14 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormField } from '@/interfaces/FormField';
 import Header from '@/components/header/Header';
+import { GetServerSideProps } from 'next';
+import { getPatient } from '../api/patients/[patientId]';
+import { IPatient } from '@/interfaces/IPatient';
+import { toCleanObject } from '@/utils/object';
+
+interface Props extends React.PropsWithChildren {
+  patient: IPatient,
+}
 
 const PatientInfoModule = () => {
 
@@ -119,7 +127,8 @@ const tabs: { key: string, text: string, component: JSX.Element }[] = [
   { key: uuid(), text: 'Evolución', component: <>Evolución!</> },
 ]
 
-const Patient = () => {
+const Patient: React.FC<Props> = ({ patient }) => {
+  console.log(patient);
 
   return (
     <Layout navbar>
@@ -140,5 +149,15 @@ const Patient = () => {
     </Layout>
   );
 };
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id } = ctx.query;
+  const patient = await getPatient(id as string);
+  
+  return {
+    props: { patient: toCleanObject(patient) },
+  }
+}
 
 export default Patient;

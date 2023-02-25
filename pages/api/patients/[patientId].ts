@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { IPatient } from '@/interfaces/IPatient';
 import Patient from '@/models/patient'
-import connectMongo from '@/utils/connectMongo';
+import connectMongo from '@/helpers/connectMongo';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -12,6 +12,14 @@ type ErrorData = {
   message: string
 }
 
+export const getPatient = async (patientId: string): Promise<IPatient | null> => await Patient.findById(patientId).lean();
+
+export const postPatient = async (body: object): Promise<IPatient> => await Patient.create(body); 
+
+export const putPatient = async (patientId: string, body: object): Promise<IPatient | null> => await Patient.findByIdAndUpdate(patientId, body);
+
+export const deletePatient = async (patientId: string): Promise<IPatient | null> => await Patient.findByIdAndDelete(patientId);  
+
 /*
   GET:    /patients/[patientId]
   POST:   /patients/create
@@ -19,11 +27,10 @@ type ErrorData = {
   DELETE: /patients/[patientId]
 */
 
-const getPatient = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
+const getHandler = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
   try {
     const { patientId } = req.query
-    const patient: IPatient | null = await Patient.findById(patientId);  
-      
+    const patient = await getPatient(patientId as string)
     if (!patient) return res.status(404).json({ message: 'Patient not found!' })
     res.status(200).json({ patient })
     
@@ -32,10 +39,10 @@ const getPatient = async (req: NextApiRequest, res: NextApiResponse<Data | Error
   }
 }
 
-const postPatient = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
+const postHandler = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
   try {
     const { body } = req
-    const patient: IPatient = await Patient.create(body);  
+    const patient: IPatient = await postPatient(body);
     res.status(200).json({ patient })
 
   } catch (error: any) {
@@ -43,10 +50,10 @@ const postPatient = async (req: NextApiRequest, res: NextApiResponse<Data | Erro
   }
 }
 
-const putPatient = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
+const putHandler = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
   try {
     const { body, query: { patientId } } = req
-    const patient: IPatient | null = await Patient.findByIdAndUpdate(patientId, body);  
+    const patient: IPatient | null = await putPatient(patientId as string, body);
     
     if (!patient) return res.status(404).json({ message: 'Patient not found!' })
     res.status(200).json({ patient })
@@ -56,10 +63,10 @@ const putPatient = async (req: NextApiRequest, res: NextApiResponse<Data | Error
   }
 }
 
-const deletePatient = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
+const deleteHandler = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
   try {
     const { patientId } = req.query
-    const patient: IPatient | null = await Patient.findByIdAndDelete(patientId);  
+    const patient: IPatient | null = await deletePatient(patientId as string);
       
     if (!patient) return res.status(404).json({ message: 'Patient not found!' })
     res.status(200).json({ patient })
@@ -78,20 +85,20 @@ export default async function handler(
     
     switch (req.method) {
       case 'GET':
-        await getPatient(req, res);
+        await getHandler(req, res);
         break;
 
       case 'POST':
-        await postPatient(req, res);
+        await postHandler(req, res);
         break;
         
       case 'PUT':
       case 'PATCH':
-        await putPatient(req, res);
+        await putHandler(req, res);
         break;
 
       case 'DELETE':
-        await deletePatient(req, res)
+        await deleteHandler(req, res)
         break;
     
       default:

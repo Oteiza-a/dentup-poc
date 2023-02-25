@@ -11,6 +11,6 @@ const patientSchema = new Schema({
   profileImage: String,
 });
 
-const Patient = models.patients || model<IPatient>('patients', patientSchema);
+const Patient = models?.patients || model<IPatient>('patients', patientSchema);
 
 export default Patient;
