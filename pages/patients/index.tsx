@@ -5,10 +5,10 @@ import { Alert, AlertIcon, Avatar, Button, Card, Table, TableCaption, TableConta
 import { useRouter } from "next/router";
 import styles from '@/styles/Patients.module.css'
 import useSWR from 'swr'
-import axios from "axios";
 import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
 import { FiUserPlus } from 'react-icons/fi'
 import { getPatients } from "@/clients/patients";
+import axios from "axios";
 
 const fetcher = async (): Promise<IPatient[]> => {
   const res = await getPatients();
@@ -19,12 +19,9 @@ export default function Patients() {
   const { data: patients, error, isLoading } = useSWR('/api/patients', fetcher)
   const router = useRouter()
 
-  const onPatientClick = (_id: string) => {
+  const onPatientClick = async (_id: string) => {
     router.push(`/patients/${_id}`)
   }
-
-  console.log('process.env.VERCEL_URL', process.env.VERCEL_URL);
-  console.log('process.env.NEXT_PUBLIC_VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL);
 
   return (
     <Layout navbar>

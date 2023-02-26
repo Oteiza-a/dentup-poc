@@ -8,7 +8,6 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormField } from '@/interfaces/FormField';
 import { IPatient } from '@/interfaces/IPatient';
-import axios from 'axios';
 import { ToastMessages } from '@/enums/ToastMessages';
 import { getToastMessage } from '@/helpers/toast';
 import { FiCheckSquare, FiUserX } from 'react-icons/fi'
@@ -40,6 +39,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
   } = useForm<IPatient>({ resolver: yupResolver(schema), defaultValues: patientData || {} })
 
   const onSubmit = async (data: IPatient) => {
+    
     try {
       if (isNewPatient) {
         const res = await createPatient(data)

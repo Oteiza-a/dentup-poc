@@ -12,7 +12,7 @@ type ErrorData = {
   message: string
 }
 
-export const getPatient = async (patientId: string): Promise<IPatient | null> => await Patient.findById(patientId).lean();
+export const getPatient = async (patientId: string): Promise<IPatient | null> => await Patient.findById(patientId);
 
 export const postPatient = async (body: object): Promise<IPatient> => await Patient.create(body); 
 
