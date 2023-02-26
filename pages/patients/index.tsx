@@ -8,10 +8,10 @@ import useSWR from 'swr'
 import axios from "axios";
 import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
 import { FiUserPlus } from 'react-icons/fi'
+import { getPatients } from "@/clients/patients";
 
 const fetcher = async (): Promise<IPatient[]> => {
-  console.log(process.env.VERCEL_URL);
-  const res = await axios.get('http://localhost:3000/api/patients')
+  const res = await getPatients();
   return res?.data?.patients
 }
 
@@ -24,7 +24,7 @@ export default function Patients() {
   }
 
   console.log('process.env.VERCEL_URL', process.env.VERCEL_URL);
-  console.log('process.env.VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL);
+  console.log('process.env.NEXT_PUBLIC_VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL);
 
   return (
     <Layout navbar>

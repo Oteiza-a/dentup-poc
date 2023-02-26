@@ -3,7 +3,11 @@ import axios from "axios"
 
 const apiUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 
-console.log(apiUrl);
+export const getPatients = async () => {
+  const res = await axios.get(`${apiUrl}/api/patients`)
+  return res;
+}
+
 export const createPatient = async (data: IPatient) => {
   const res = await axios.post(`${apiUrl}/api/patients/create`, data)
   return res;
