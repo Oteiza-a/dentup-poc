@@ -1,12 +1,13 @@
 import Header from "@/components/header/Header";
 import Layout from "@/components/layout/Layout";
 import { IPatient } from "@/interfaces/IPatient";
-import { Alert, AlertIcon, Avatar, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Alert, AlertIcon, Avatar, Button, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import styles from '@/styles/Patients.module.css'
 import useSWR from 'swr'
 import axios from "axios";
 import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
+import { FiUserPlus } from 'react-icons/fi'
 
 const fetcher = async (): Promise<IPatient[]> => {
     const res = await axios.get('http://localhost:3000/api/patients')
@@ -23,7 +24,22 @@ export default function Patients() {
 
   return (
     <Layout navbar>
-      <Header title="Pacientes" subtitle="Administra los pacientes."/>
+      <Header 
+        title="Pacientes" 
+        subtitle="Administra los pacientes."
+        rightSectionElements={
+          <div className={styles.headerOptionsContainer}>
+            <Button 
+              onClick={() => router.push(`/patients/new`)}
+              colorScheme='blue' 
+              mb='2' 
+              rightIcon={<FiUserPlus />}
+            >
+              Crear paciente
+            </Button>
+          </div>
+        }  
+      />
 
       <Card mt='6' p='6' boxShadow='lg'>
 

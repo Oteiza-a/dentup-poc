@@ -1,134 +1,25 @@
 import Layout from '@/components/layout/Layout';
-import { Button, Card, FormControl, FormErrorMessage, FormLabel, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Card, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import React from 'react';
 import { v4 as uuid } from 'uuid';
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { FormField } from '@/interfaces/FormField';
 import Header from '@/components/header/Header';
 import { GetServerSideProps } from 'next';
 import { getPatient } from '../api/patients/[patientId]';
 import { IPatient } from '@/interfaces/IPatient';
 import { toCleanObject } from '@/utils/object';
+import { PatientForm } from '@/components/patient-form/PatientForm';
 
 interface Props extends React.PropsWithChildren {
-  patient: IPatient,
+  isNewPatient: boolean
+  patient?: IPatient,
 }
 
-const PatientInfoModule = () => {
-
-  const schema = yup.object().shape({
-    name: yup.string().required('El nombre del paciente es obligatorio'),
-    lastNames: yup.string().required('Los apellidos del paciente es obligatorio'),
-    dni: yup.string().required('El DNI/RUT del paciente es obligatorio'),
-    phoneNumber: yup.string().required('El número de contacto del paciente es obligatorio'),
-    email: yup.string().email(),
-  })
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) })
-
-  const onSubmit = (data: any) => {
-    console.log('submit data:', data);
-  }
-
-  const fields: FormField[] = [
-    {
-      type: 'input',
-      name: 'name',
-      label: 'Nombre',
-      placeholder: 'Nombre del paciente',
-    },
-    {
-      type: 'input',
-      name: 'lastNames',
-      label: 'Apellidos',
-      placeholder: 'Apellidos del paciente',
-    },
-    {
-      type: 'input',
-      name: 'dni',
-      label: 'DNI/RUT',
-      placeholder: 'DNI/RUT del paciente',
-    },
-    {
-      type: 'input',
-      name: 'phoneNumber',
-      label: 'Número de contacto',
-      placeholder: 'Número de contacto',
-    },
-    {
-      type: 'input',
-      name: 'email',
-      label: 'Correo electrónico',
-      placeholder: 'Correo electrónico',
-    },
-
-    // {
-    //   type: 'select',
-    //   name: 'lastNames',
-    //   label: 'lastNamessssss',
-    //   placeholder: 'lastNamesssssssssssss',
-    //   options: [
-    //     { value: 'option1', text: 'Oteizzza' },
-    //     { value: 'option2', text: 'Oteizzzo' },
-    //     { value: 'option3', text: 'Oteizzze' },
-    //   ]
-    // },
+const Patient: React.FC<Props> = ({ isNewPatient, patient }) => {
+  const tabs: { key: string, text: string, component: JSX.Element }[] = [
+    { key: uuid(), text: 'Información de paciente', component: <PatientForm patientData={patient} isNewPatient={isNewPatient} /> },
+    { key: uuid(), text: 'Archivos', component: <>Archivos!</> },
+    { key: uuid(), text: 'Evolución', component: <>Evolución!</> },
   ]
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-
-      {fields.map(({ type, name, label, placeholder, options }) => (
-        <FormControl isInvalid={Boolean(errors?.[name]?.message)} mt='4' key={name}>
-          <FormLabel htmlFor='name'>{label}</FormLabel>
-
-          {type === 'input' && 
-            <Input
-              id={name}
-              placeholder={placeholder || ''}
-              {...register(name)}
-            />
-          }
-
-          {type === 'select' &&
-            <Select
-              id={name}
-              placeholder={placeholder}
-              {...register(name)}
-            >
-              {Boolean(options?.length) && options?.map(({ value, text }) => (
-                <option key={value} value={value}>{text}</option>
-              ))}
-            </Select>
-          }
-
-          <FormErrorMessage>
-            {String(errors?.[name]?.message)}
-          </FormErrorMessage>
-        </FormControl>
-      ))}
-
-      <Button mt='6' colorScheme='blue' isLoading={isSubmitting} type='submit'>
-        Guardar
-      </Button>
-    </form>
-  )
-}
-
-const tabs: { key: string, text: string, component: JSX.Element }[] = [
-  { key: uuid(), text: 'Información de paciente', component: <PatientInfoModule /> },
-  { key: uuid(), text: 'Archivos', component: <>Archivos!</> },
-  { key: uuid(), text: 'Evolución', component: <>Evolución!</> },
-]
-
-const Patient: React.FC<Props> = ({ patient }) => {
-  console.log(patient);
 
   return (
     <Layout navbar>
@@ -153,11 +44,16 @@ const Patient: React.FC<Props> = ({ patient }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query;
-  const patient = await getPatient(id as string);
-  
-  return {
-    props: { patient: toCleanObject(patient) },
+  const isNewPatient = id === 'new'
+
+  const props: Props = { isNewPatient }
+
+  if (!isNewPatient) {
+    const patient = await getPatient(id as string);
+    props.patient = toCleanObject(patient);
   }
+  
+  return { props }
 }
 
 export default Patient;

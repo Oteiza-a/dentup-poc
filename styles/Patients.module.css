@@ -6,3 +6,8 @@
 .patientRow:hover {
   background-color: var(--chakra-colors-blue-50);
 }
+.headerOptionsContainer {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}

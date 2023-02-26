@@ -1,0 +1,10 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.headerLeftSection {
+  width: fit-content;
+}
+.headerRightSection {
+  width: fit-content;
+}

@@ -97,6 +97,14 @@ a {
   }
 } */
 
+/* COMPONENTS */
+.buttonSizing {
+  min-width: 100px;
+}
+
+
+/* LIBS CUSTOMIZATION */
+
 @media screen and (max-width: 600px) {
   .fc .fc-toolbar {
     flex-direction: column !important; /* making calendar responsive */ 
