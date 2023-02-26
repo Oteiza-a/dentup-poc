@@ -4,6 +4,8 @@ import Patient from '@/models/patient'
 import connectMongo from '@/helpers/connectMongo';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+connectMongo();
+
 type Data = {
   patient: IPatient
 }
@@ -11,6 +13,7 @@ type Data = {
 type ErrorData = {
   message: string
 }
+
 
 export const getPatient = async (patientId: string): Promise<IPatient | null> => await Patient.findById(patientId);
 
@@ -80,9 +83,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data | ErrorData>
 ) {
-  try {
-    await connectMongo();
-    
+  try {    
     switch (req.method) {
       case 'GET':
         await getHandler(req, res);
