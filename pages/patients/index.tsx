@@ -10,8 +10,9 @@ import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
 import { FiUserPlus } from 'react-icons/fi'
 
 const fetcher = async (): Promise<IPatient[]> => {
-    const res = await axios.get('http://localhost:3000/api/patients')
-    return res?.data?.patients
+  console.log(process.env.VERCEL_URL);
+  const res = await axios.get('http://localhost:3000/api/patients')
+  return res?.data?.patients
 }
 
 export default function Patients() {
@@ -21,6 +22,9 @@ export default function Patients() {
   const onPatientClick = (_id: string) => {
     router.push(`/patients/${_id}`)
   }
+
+  console.log('process.env.VERCEL_URL', process.env.VERCEL_URL);
+  console.log('process.env.VERCEL_URL', process.env.NEXT_PUBLIC_VERCEL_URL);
 
   return (
     <Layout navbar>

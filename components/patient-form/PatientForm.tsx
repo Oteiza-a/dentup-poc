@@ -13,6 +13,7 @@ import { ToastMessages } from '@/enums/ToastMessages';
 import { getToastMessage } from '@/helpers/toast';
 import { FiCheckSquare, FiUserX } from 'react-icons/fi'
 import { useRouter } from 'next/router';
+import { createPatient, deletePatient, updatePatient } from '@/clients/patients';
 interface Props extends React.PropsWithChildren {
   isNewPatient: boolean
   patientData?: IPatient
@@ -41,13 +42,13 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
   const onSubmit = async (data: IPatient) => {
     try {
       if (isNewPatient) {
-        const res = await axios.post('http://localhost:3000/api/patients/create', data)
+        const res = await createPatient(data)
         if (res.status === 200) {
           toast(getToastMessage(ToastMessages.createPatientSuccess))
         }
         
       } else {
-        const res = await axios.put(`http://localhost:3000/api/patients/${patientData?._id}`, data)
+        const res = await updatePatient(patientData?._id as string, data)
         if (res.status === 200) {
           toast(getToastMessage(ToastMessages.updatePatientSuccess))
         }
@@ -61,7 +62,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
 
   const onDelete = async () => {
     try {
-      const res = await axios.delete(`http://localhost:3000/api/patients/${patientData?._id}`)
+      const res = await deletePatient(patientData?._id as string)
       if (res.status === 200) {
         toast(getToastMessage(ToastMessages.deletePatientSuccess))
       }
