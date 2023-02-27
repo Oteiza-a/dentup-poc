@@ -10,15 +10,33 @@ const events = [
   { title: 'Meeting', start: new Date() }
 ]
 
+const timesViewOptions: any = {
+  slotDuration: '00:10:00',
+  slotLabelInterval: '00:10:00',
+  slotMinTime: '08:00:00',
+  slotLabelFormat: {
+    hour: '2-digit',
+    minute: '2-digit',
+    omitZeroMinute: false,
+    meridiem: 'short'
+  },
+  titleFormat: { // will produce something like "Tuesday, September 18, 2018"
+    month: 'long',
+    // year: 'numeric',
+    // weekday: 'long'
+    day: 'numeric',
+  }
+}
+
 const AppointmentCalendar: React.FC<Props> = ({}) => {
   return (
     <>
       <FullCalendar
         locale='es-cl'
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView='timeGridWeek'
+        initialView='timeGridWeekMins'
         headerToolbar={{
-          left: 'dayGridMonth,timeGridWeek,timeGridDay',
+          left: 'dayGridMonth,timeGridWeekMins,timeGridDayMins',
           center: 'title',
           right: 'today prev,next',
         }}
@@ -26,13 +44,24 @@ const AppointmentCalendar: React.FC<Props> = ({}) => {
         selectable={true}
         selectMirror={true}
         buttonText={{
-          today:    'Hoy',
+          today:    'Ir a día actual',
           month:    'Mes',
           week:     'Semana',
           day:      'Día',
           list:     'Lista'
         }}
-        
+        allDaySlot={false}
+        views={{
+          timeGridWeekMins: {
+            type: 'timeGridWeek',
+            ...timesViewOptions,
+            
+          },
+          timeGridDayMins: {
+            type: 'timeGridDay',
+            ...timesViewOptions,
+          },
+        }}
         weekends={true}
         events={events}
         eventContent={renderEventContent}
