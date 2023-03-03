@@ -4,19 +4,13 @@ import { IPatient } from "@/interfaces/IPatient";
 import { Alert, AlertIcon, Avatar, Button, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import styles from '@/styles/Patients.module.css'
-import useSWR from 'swr'
 import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
 import { FiUserPlus } from 'react-icons/fi'
 import { getPatients } from "@/clients/patients";
-import axios from "axios";
-
-const fetcher = async (): Promise<IPatient[]> => {
-  const res = await getPatients();
-  return res?.data?.patients
-}
+import { usePatients } from "@/hooks/usePatients";
 
 export default function Patients() {
-  const { data: patients, error, isLoading } = useSWR('/api/patients', fetcher)
+  const { patients, isError, isLoading } = usePatients()
   const router = useRouter()
 
   const onPatientClick = async (_id: string) => {
@@ -25,26 +19,26 @@ export default function Patients() {
 
   return (
     <Layout navbar>
-      <Header 
-        title="Pacientes" 
+      <Header
+        title="Pacientes"
         subtitle="Administra los pacientes."
         rightSectionElements={
           <div className={styles.headerOptionsContainer}>
-            <Button 
+            <Button
               onClick={() => router.push(`/patients/new`)}
-              colorScheme='blue' 
-              mb='2' 
+              colorScheme='blue'
+              mb='2'
               rightIcon={<FiUserPlus />}
             >
               Crear paciente
             </Button>
           </div>
-        }  
+        }
       />
 
       <Card mt='6' p='6' boxShadow='lg'>
 
-        {!error 
+        {!isError
           ? <TableContainer>
               <Table variant='simple' colorScheme='blue'>
                 <TableCaption>Pacientes</TableCaption>
@@ -61,7 +55,7 @@ export default function Patients() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {isLoading 
+                  {isLoading
                     ? <TableCellsSkeleton />
                     : patients?.map(({ _id, profileImage, name, lastNames, dni, phoneNumber, email, treatments }: IPatient) => (
                         <Tr key={_id} onClick={() => onPatientClick(_id)} className={styles.patientRow}>

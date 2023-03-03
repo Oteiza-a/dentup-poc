@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Heading, Highlight, ListItem, UnorderedList } from '@chakra-ui/react';
+import React from 'react';
+import { Highlight, ListItem, UnorderedList } from '@chakra-ui/react';
 import Link from 'next/link';
 import styles from './Navbar.module.css'
 import { useRouter } from 'next/router';

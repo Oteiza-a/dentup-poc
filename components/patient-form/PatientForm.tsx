@@ -1,18 +1,19 @@
-import { 
-  AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, 
-  AlertDialogOverlay, Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Select, 
+import {
+  AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent,
+  AlertDialogOverlay, Box, Button,
   useToast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FormField } from '@/interfaces/FormField';
+import { PatientFormField } from '@/interfaces/FormField';
 import { IPatient } from '@/interfaces/IPatient';
 import { ToastMessages } from '@/enums/ToastMessages';
 import { getToastMessage } from '@/helpers/toast';
 import { FiCheckSquare, FiUserX } from 'react-icons/fi'
 import { useRouter } from 'next/router';
 import { createPatient, deletePatient, updatePatient } from '@/clients/patients';
+import { renderFormFields } from '@/helpers/forms';
 interface Props extends React.PropsWithChildren {
   isNewPatient: boolean
   patientData?: IPatient
@@ -31,7 +32,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
     phoneNumber: yup.string().required('El número de contacto del paciente es obligatorio'),
     email: yup.string().email(),
   })
-  
+
   const {
     handleSubmit,
     register,
@@ -39,21 +40,20 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
   } = useForm<IPatient>({ resolver: yupResolver(schema), defaultValues: patientData || {} })
 
   const onSubmit = async (data: IPatient) => {
-    
     try {
       if (isNewPatient) {
         const res = await createPatient(data)
         if (res.status === 200) {
           toast(getToastMessage(ToastMessages.createPatientSuccess))
         }
-        
+
       } else {
         const res = await updatePatient(patientData?._id as string, data)
         if (res.status === 200) {
           toast(getToastMessage(ToastMessages.updatePatientSuccess))
         }
       }
-      
+
     } catch (error) {
       toast(getToastMessage(ToastMessages.createPatientError))
       console.error(error)
@@ -74,7 +74,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
     router.push('/patients/')
   }
 
-  const fields: FormField[] = [
+  const fields: PatientFormField[] = [
     {
       type: 'input',
       name: 'name',
@@ -105,60 +105,20 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
       label: 'Correo electrónico',
       placeholder: 'Correo electrónico',
     },
-
-    // {
-    //   type: 'select',
-    //   name: 'lastNames',
-    //   label: 'lastNamessssss',
-    //   placeholder: 'lastNamesssssssssssss',
-    //   options: [
-    //     { value: 'option1', text: 'Oteizzza' },
-    //     { value: 'option2', text: 'Oteizzzo' },
-    //     { value: 'option3', text: 'Oteizzze' },
-    //   ]
-    // },
   ]
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        {fields.map(({ type, name, label, placeholder, options }) => (
-          <FormControl isInvalid={Boolean(errors?.[name]?.message)} mt='4' key={name}>
-            <FormLabel htmlFor='name'>{label}</FormLabel>
-
-            {type === 'input' && 
-              <Input
-                id={name}
-                placeholder={placeholder || ''}
-                {...register(name)}
-              />
-            }
-
-            {type === 'select' &&
-              <Select
-                id={name}
-                placeholder={placeholder}
-                {...register(name)}
-              >
-                {Boolean(options?.length) && options?.map(({ value, text }) => (
-                  <option key={value} value={value}>{text}</option>
-                ))}
-              </Select>
-            }
-
-            <FormErrorMessage>
-              {String(errors?.[name]?.message)}
-            </FormErrorMessage>
-          </FormControl>
-        ))}
+        {renderFormFields(fields, errors, register)}
 
         <Box display='flex' justifyContent='space-between'>
           <Button mt='6' minWidth='175px' colorScheme='blue' isLoading={isSubmitting} type='submit' rightIcon={<FiCheckSquare/>}>
             Guardar
           </Button>
 
-          {!isNewPatient && 
+          {!isNewPatient &&
             <Button onClick={onDeleteDialogOpen} mt='6' minWidth='175px' colorScheme='red' variant='outline' rightIcon={<FiUserX />}>
               Eliminar Paciente
             </Button>

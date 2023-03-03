@@ -3,8 +3,11 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import { DateSelectArg } from '@fullcalendar/core';
 
-interface Props extends React.PropsWithChildren {}
+interface Props extends React.PropsWithChildren {
+  onTimeSelect: (selectionInfo: DateSelectArg) => any
+}
 
 const events = [
   { title: 'Meeting', start: new Date() }
@@ -28,46 +31,46 @@ const timesViewOptions: any = {
   }
 }
 
-const AppointmentCalendar: React.FC<Props> = ({}) => {
+const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect }) => {
   return (
-    <>
-      <FullCalendar
-        locale='es-cl'
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView='timeGridWeekMins'
-        headerToolbar={{
-          left: 'dayGridMonth,timeGridWeekMins,timeGridDayMins',
-          center: 'title',
-          right: 'today prev,next',
-        }}
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        buttonText={{
-          today:    'Ir a día actual',
-          month:    'Mes',
-          week:     'Semana',
-          day:      'Día',
-          list:     'Lista'
-        }}
-        allDaySlot={false}
-        views={{
-          timeGridWeekMins: {
-            type: 'timeGridWeek',
-            ...timesViewOptions,
-            
-          },
-          timeGridDayMins: {
-            type: 'timeGridDay',
-            ...timesViewOptions,
-          },
-        }}
-        weekends={true}
-        events={events}
-        eventContent={renderEventContent}
-        eventColor={'#4299e1'}
-      />
-    </>
+    <FullCalendar
+      locale='es-cl'
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+      initialView='timeGridWeekMins'
+      headerToolbar={{
+        left: 'dayGridMonth,timeGridWeekMins,timeGridDayMins',
+        center: 'title',
+        right: 'today prev,next',
+      }}
+      editable={true}
+      selectable={true}
+      selectMirror={true}
+      buttonText={{
+        today:    'Ir a día actual',
+        month:    'Mes',
+        week:     'Semana',
+        day:      'Día',
+        list:     'Lista'
+      }}
+      allDaySlot={false}
+      views={{
+        timeGridWeekMins: {
+          type: 'timeGridWeek',
+          ...timesViewOptions,
+          
+        },
+        timeGridDayMins: {
+          type: 'timeGridDay',
+          ...timesViewOptions,
+        },
+      }}
+      weekends={true}
+      events={events}
+      eventContent={renderEventContent}
+      eventColor={'#4299e1'}
+
+      select={onTimeSelect}
+    />
   );
 };
 
