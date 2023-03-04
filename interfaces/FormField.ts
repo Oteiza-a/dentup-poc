@@ -1,18 +1,18 @@
 import { FormFieldOption } from "./FormFieldOption"
-import { IAppointment } from "./IAppointment"
 import { IPatient } from "./IPatient"
 
-interface FormField {
-  type: 'input' | 'select' 
+type formFieldType = 'input' | 'select'  | 'date' | 'time' | 'search-select'
+export interface FormField {
+  type: formFieldType
   label: string
   placeholder?: string
   options?: FormFieldOption[]
 }
 
 export interface PatientFormField extends FormField {
-  name: keyof IPatient // :O
+  name: keyof IPatient // :o
 }
 
 export interface AppointmentFormField extends FormField {
-  name: keyof IAppointment // :O
+  name: any
 }

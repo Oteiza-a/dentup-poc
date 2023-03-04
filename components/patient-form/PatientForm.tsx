@@ -37,6 +37,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    control,
   } = useForm<IPatient>({ resolver: yupResolver(schema), defaultValues: patientData || {} })
 
   const onSubmit = async (data: IPatient) => {
@@ -111,7 +112,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        {renderFormFields(fields, errors, register)}
+        {renderFormFields(fields, errors, register, control)}
 
         <Box display='flex' justifyContent='space-between'>
           <Button mt='6' minWidth='175px' colorScheme='blue' isLoading={isSubmitting} type='submit' rightIcon={<FiCheckSquare/>}>

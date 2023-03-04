@@ -6,4 +6,5 @@ export interface IAppointment {
   start: string
   end: string
   treatment: string
+  name: string
 }

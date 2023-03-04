@@ -6,42 +6,42 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   useDisclosure,
 } from '@chakra-ui/react'
 import { usePatients } from '@/hooks/usePatients';
 import AppointmentForm from '../appointment-form/AppointmentForm';
+import { getTimeString } from '@/utils/strings';
+import { SelectedCalendarTime } from '@/interfaces/SelectedCalendarTime';
 
 interface Props extends React.PropsWithChildren {}
 
-interface SelectedTime {
-  start: string
-  end: string
-}
-
 const AppointmentCalendarContainer: React.FC<Props> = () => {
-  const [selectedTime, setSelectedTime] = useState<SelectedTime | null>(null);
+  const [selectedTime, setSelectedTime] = useState<SelectedCalendarTime | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { patients, isError, isLoading } = usePatients()
 
   const onTimeSelect = (selectionInfo: DateSelectArg) => {
-    const { startStr: start, endStr: end } = selectionInfo
-    setSelectedTime({ start, end })
+    const { start, end } = selectionInfo
+    const startTime = getTimeString(start);
+    const endTime = getTimeString(end);
+    start.setHours(0,0,0,0)
+    const day = start.toISOString().split('T')[0];
+
+    setSelectedTime({ day, startTime, endTime })
     onOpen()
   }
 
-  const onAppointmentSubmit = () => {
-    console.log();
+  const onAppointmentSubmit = async (data: any) => {
+    console.log(data);
   }
 
   return (
     <>
       <AppointmentCalendar onTimeSelect={onTimeSelect}/>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay />
 
         <ModalContent>
@@ -50,15 +50,17 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
           <ModalHeader>Agendar hora</ModalHeader>
 
           <ModalBody>
-            <AppointmentForm patients={patients || []} isNewAppointment={false}/>
+            <AppointmentForm
+              patients={patients || []}
+              isNewAppointment={false}
+              onSubmit={onAppointmentSubmit}
+              onCancel={() => {
+                setSelectedTime(null)
+                onClose()
+              }}
+              selectedTime={selectedTime}
+            />
           </ModalBody>
-
-          <ModalFooter>
-            <Button variant='ghost'>Secondary Action</Button>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Confirmar
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
