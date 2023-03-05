@@ -4,4 +4,6 @@ export enum ToastMessages {
   createPatientError,
   deletePatientSuccess,
   deletePatientError,
+  createAppointmentSuccess,
+  createAppointmentError,
 }

@@ -9,18 +9,22 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import { usePatients } from '@/hooks/usePatients';
 import AppointmentForm from '../appointment-form/AppointmentForm';
 import { getTimeString } from '@/utils/strings';
 import { SelectedCalendarTime } from '@/interfaces/SelectedCalendarTime';
+import { getToastMessage } from '@/helpers/toast';
+import { ToastMessages } from '@/enums/ToastMessages';
 
 interface Props extends React.PropsWithChildren {}
 
 const AppointmentCalendarContainer: React.FC<Props> = () => {
   const [selectedTime, setSelectedTime] = useState<SelectedCalendarTime | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { patients, isError, isLoading } = usePatients()
+  const { patients } = usePatients()
+  const toast = useToast();
 
   const onTimeSelect = (selectionInfo: DateSelectArg) => {
     const { start, end } = selectionInfo
@@ -34,7 +38,8 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
   }
 
   const onAppointmentSubmit = async (data: any) => {
-    console.log(data);
+    toast(getToastMessage(ToastMessages.createAppointmentSuccess))
+    onClose()
   }
 
   return (

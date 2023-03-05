@@ -35,7 +35,21 @@ const messages: messagesDict = {
   [ToastMessages.deletePatientError]: {
     title: 'Ha ocurrido un problema.',
     description: "No se ha podido eliminar al paciente, inténtelo nuevamente.",
+    status: 'error',
+    duration: 7000,
+    isClosable: true,
+  },
+  [ToastMessages.createAppointmentSuccess]: {
+    title: 'Hora agendada.',
+    description: "Se ha agendado la hora exitosamente.",
     status: 'success',
+    duration: 7000,
+    isClosable: true,
+  },
+  [ToastMessages.createAppointmentError]: {
+    title: 'Hora agendada.',
+    description: "Ha ocurrido un problema al agendar la hora, inténtelo nuevamente.",
+    status: 'error',
     duration: 7000,
     isClosable: true,
   },
