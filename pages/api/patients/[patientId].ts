@@ -23,10 +23,10 @@ export const putPatient = async (patientId: string, body: object): Promise<IPati
 export const deletePatient = async (patientId: string): Promise<IPatient | null> => await Patient.findByIdAndDelete(patientId);  
 
 /*
-  GET:    /patients/[patientId]
-  POST:   /patients/create
-  PUT:    /patients/[patientId]
-  DELETE: /patients/[patientId]
+  GET:    /api/patients/[patientId]
+  POST:   /api/patients/create
+  PUT:    /api/patients/[patientId]
+  DELETE: /api/patients/[patientId]
 */
 
 const getHandler = async (req: NextApiRequest, res: NextApiResponse<Data | ErrorData>) => {
