@@ -1,4 +1,5 @@
 import { renderFormFields } from '@/helpers/forms';
+import { IAppointmentForm } from '@/interfaces/AppointmentForm';
 import { AppointmentFormField } from '@/interfaces/FormField';
 import { IAppointment } from '@/interfaces/IAppointment';
 import { IPatient } from '@/interfaces/IPatient';
@@ -15,7 +16,7 @@ interface Props extends React.PropsWithChildren {
   isNewAppointment: boolean
   appointmentData?: IAppointment
   selectedTime: SelectedCalendarTime | null
-  onSubmit: (appointmentData: any) => any
+  onSubmit: (appointmentData: IAppointmentForm) => any
   onCancel: () => any
 }
 
@@ -42,7 +43,7 @@ const AppointmentForm: React.FC<Props> = ({ patients, isNewAppointment, appointm
     register,
     formState: { errors, isSubmitting },
     control,
-  } = useForm({ resolver: yupResolver(schema), defaultValues: defaultValues || {} })
+  } = useForm<IAppointmentForm>({ resolver: yupResolver(schema), defaultValues: defaultValues || {} })
 
   const fields: AppointmentFormField[] = [
     {

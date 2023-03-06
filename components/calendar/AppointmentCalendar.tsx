@@ -3,10 +3,12 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { DateSelectArg } from '@fullcalendar/core';
+import { DateSelectArg, EventClickArg, EventSourceInput } from '@fullcalendar/core';
 
 interface Props extends React.PropsWithChildren {
   onTimeSelect: (selectionInfo: DateSelectArg) => any
+  onAppointmentClick: (event: EventClickArg) => any
+  events: EventSourceInput
 }
 
 const events = [
@@ -31,7 +33,7 @@ const timesViewOptions: any = {
   }
 }
 
-const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect }) => {
+const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointmentClick }) => {
   return (
     <FullCalendar
       locale='es-cl'
@@ -57,7 +59,7 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect }) => {
         timeGridWeekMins: {
           type: 'timeGridWeek',
           ...timesViewOptions,
-          
+
         },
         timeGridDayMins: {
           type: 'timeGridDay',
@@ -68,8 +70,8 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect }) => {
       events={events}
       eventContent={renderEventContent}
       eventColor={'#4299e1'}
-
       select={onTimeSelect}
+      eventClick={onAppointmentClick}
     />
   );
 };
@@ -79,6 +81,7 @@ function renderEventContent(eventInfo: { timeText: string, event: any }) {
   return (
     <>
       <b>{eventInfo.timeText}</b>
+      <br />
       <i>{eventInfo.event.title}</i>
     </>
   )

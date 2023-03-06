@@ -1,12 +1,10 @@
-import { IPatient } from "./IPatient"
-
 export interface IAppointment {
   _id: string
-  patient: IPatient
-  
+  patient: string
+
   day: string
-  start: string
-  end: string
+  startTime: string
+  endTime: string
 
   treatment: string
   name: string

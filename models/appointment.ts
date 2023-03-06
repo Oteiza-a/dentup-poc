@@ -4,13 +4,13 @@ import { IAppointment } from '@/interfaces/IAppointment';
 const appointmentSchema = new Schema({
   patient: { type: Schema.Types.ObjectId, ref: 'patients' },
   day: String,
-  start: String,
-  end: String,
+  startTime: String,
+  endTime: String,
 
   treatment: String,
   name: String,
 });
 
-const Apointment = models?.appointments || model<IAppointment>('appointments', appointmentSchema);
+const Apointment = models?.['dent-appointments'] || model<IAppointment>('dent-appointments', appointmentSchema);
 
 export default Apointment;
