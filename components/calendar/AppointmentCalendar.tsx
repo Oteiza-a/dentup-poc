@@ -55,7 +55,7 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointm
         day:      'Día',
         list:     'Lista'
       }}
-      allDaySlot={true}
+      // allDaySlot={true}
       views={{
         timeGridWeekMins: {
           type: 'timeGridWeek',
