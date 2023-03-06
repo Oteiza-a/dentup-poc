@@ -1,12 +1,7 @@
+import AppointmentCalendarContainer from "@/components/calendar/AppointmentCalendarContainer";
 import Header from "@/components/header/Header";
 import Layout from "@/components/layout/Layout";
 import { Box } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
-
-const AppointmentCalendarContainer = dynamic(
-  () => import('@/components/calendar/AppointmentCalendarContainer'),
-  { ssr: false }
-)
 
 export default function Calendar() {
   return (
