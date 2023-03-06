@@ -131,7 +131,7 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
         events={events || []}
       />
 
-      <Modal isOpen={isFormModalOpen} onClose={onModalClose} closeOnOverlayClick={false}>
+      <Modal isOpen={isFormModalOpen} onClose={resetAppointmentAction} closeOnOverlayClick={false}>
         <ModalOverlay />
 
         <ModalContent>
@@ -143,11 +143,7 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
             <AppointmentForm
               patients={patients || []}
               onSubmit={onAppointmentSubmit}
-              onCancel={() => {
-                setSelectedAppointment(null)
-                setSelectedTime(null)
-                onModalClose()
-              }}
+              onCancel={resetAppointmentAction}
               onDeleteAppointment={onDeleteDialogOpen}
               selectedTime={selectedTime}
               clickedAppointment={selectedAppointment}
