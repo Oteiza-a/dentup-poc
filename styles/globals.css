@@ -109,6 +109,12 @@ a {
   text-align: center !important;
 }
 
+.fc-highlight {
+  background-color: var(--chakra-colors-blue-400) !important;
+  opacity: 0.5;
+  border-radius: 3px;
+}
+
 @media screen and (max-width: 600px) {
   .fc .fc-toolbar {
     flex-direction: column !important; /* making calendar responsive */ 

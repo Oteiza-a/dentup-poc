@@ -47,7 +47,7 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointm
       }}
       // editable={true}
       selectable={true}
-      selectMirror={true}
+      // selectMirror={true} causes error when deployed
       buttonText={{
         today:    'Ir a día actual',
         month:    'Mes',
@@ -55,7 +55,7 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointm
         day:      'Día',
         list:     'Lista'
       }}
-      // allDaySlot={true}
+      allDaySlot={false}
       views={{
         timeGridWeekMins: {
           type: 'timeGridWeek',
