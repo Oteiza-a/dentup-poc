@@ -1,7 +1,6 @@
 import { renderFormFields } from '@/helpers/forms';
 import { IAppointmentForm } from '@/interfaces/AppointmentForm';
 import { AppointmentFormField } from '@/interfaces/FormField';
-import { IAppointment } from '@/interfaces/IAppointment';
 import { IPatient } from '@/interfaces/IPatient';
 import { SelectedCalendarTime } from '@/interfaces/SelectedCalendarTime';
 import { Box, Button } from '@chakra-ui/react';
@@ -13,15 +12,16 @@ import * as yup from 'yup'
 
 interface Props extends React.PropsWithChildren {
   patients: IPatient[]
-  isNewAppointment: boolean
-  appointmentData?: IAppointment
+  clickedAppointment?: IAppointmentForm | null
   selectedTime: SelectedCalendarTime | null
-  onSubmit: (appointmentData: IAppointmentForm) => any
+  onSubmit: (appointmentData: IAppointmentForm, isEditing: boolean) => any
+  onDeleteAppointment: () => any
   onCancel: () => any
 }
 
-const AppointmentForm: React.FC<Props> = ({ patients, isNewAppointment, appointmentData, selectedTime, onSubmit, onCancel }) => {
-  const defaultValues: any = (selectedTime ? selectedTime : appointmentData) || {};
+const AppointmentForm: React.FC<Props> = ({ patients, clickedAppointment, selectedTime, onSubmit, onCancel, onDeleteAppointment }) => {
+  const defaultValues: any = (clickedAppointment ? clickedAppointment : selectedTime) || {};
+
   const schema = yup.object().shape({
     // day: yup.date().required('La fecha es requerida.'),
     day: yup.lazy((value) => (
@@ -80,16 +80,23 @@ const AppointmentForm: React.FC<Props> = ({ patients, isNewAppointment, appointm
   ]
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((data) => onSubmit(data, Boolean(clickedAppointment)))}>
       {renderFormFields(fields, errors, register, control)}
 
       <Box display='flex' mt='3' mb='5' justifyContent='space-between'>
-        <Button onClick={onCancel} mt='6' minWidth='175px' colorScheme='red' variant='outline' rightIcon={<FiXCircle />}>
-          Cancelar
+        <Button
+          onClick={clickedAppointment ? onDeleteAppointment: onCancel }
+          mt='6'
+          minWidth='175px'
+          colorScheme='red'
+          variant='outline'
+          rightIcon={<FiXCircle />}
+        >
+          {clickedAppointment ? 'Eliminar hora' : 'Cancelar'}
         </Button>
 
         <Button mt='6' minWidth='175px' colorScheme='blue' isLoading={isSubmitting} type='submit' rightIcon={<FiPlusSquare/>}>
-          Guardar
+          {clickedAppointment ? 'Guardar cambios' : 'Guardar'}
         </Button>
 
       </Box>

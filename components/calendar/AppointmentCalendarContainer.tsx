@@ -17,18 +17,23 @@ import { dateToYearMonthDay, getTimeString } from '@/utils/date';
 import { SelectedCalendarTime } from '@/interfaces/SelectedCalendarTime';
 import { getToastMessage } from '@/helpers/toast';
 import { ToastMessages } from '@/enums/ToastMessages';
-import { useParsedAppointments } from '@/hooks/useAppointments';
+import { useAppointments, useParsedAppointments } from '@/hooks/useAppointments';
 import { IAppointmentForm } from '@/interfaces/AppointmentForm';
 import { IAppointment } from '@/interfaces/IAppointment';
-import { createAppointment } from '@/clients/appointments';
+import { createAppointment, deleteAppointment, updateAppointment } from '@/clients/appointments';
+import Dialog from '../dialog/Dialog';
 
 interface Props extends React.PropsWithChildren {}
 
 const AppointmentCalendarContainer: React.FC<Props> = () => {
   const [selectedTime, setSelectedTime] = useState<SelectedCalendarTime | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [selectedAppointment, setSelectedAppointment] = useState<IAppointmentForm | null>(null);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<string| null>(null);
+  const { isOpen: isFormModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+  const { isOpen: isDeleteDialogOpen, onOpen: onDeleteDialogOpen, onClose: onDeleteDialogClose } = useDisclosure()
   const { patients } = usePatients()
-  const { appointments, refetch } = useParsedAppointments()
+  const { appointments } = useAppointments()
+  const { appointments: events, refetch } = useParsedAppointments()
   const toast = useToast();
 
   const onTimeSelect = (selectionInfo: DateSelectArg) => {
@@ -39,49 +44,83 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
     const day = dateToYearMonthDay(start);
 
     setSelectedTime({ day, startTime, endTime })
-    onOpen()
+    onModalOpen()
   }
 
-  const onAppointmentSubmit = async (data: IAppointmentForm) => {
+  const onAppointmentSubmit = async (data: IAppointmentForm, isEditing: boolean) => {
     try {
       const { patient, day, startTime, endTime, treatment } = data
       const selectedPatient = patients?.find(({ _id }) => _id === patient?.value)
 
       const appointment = {
         patient: patient?.value,
-        day: dateToYearMonthDay(day),
+        day: dateToYearMonthDay(day as Date),
         startTime,
         endTime,
         treatment,
         name: `${treatment} - ${selectedPatient?.name} ${selectedPatient?.lastNames}`,
       }
 
-      await createAppointment(appointment as IAppointment)
-      refetch()
-      toast(getToastMessage(ToastMessages.createAppointmentSuccess))
-      onClose()
+      let toastMsg: ToastMessages;
+
+      if (isEditing && selectedAppointmentId) {
+        await updateAppointment(selectedAppointmentId, appointment as IAppointment)
+        toastMsg = ToastMessages.updateAppointmentSuccess;
+      } else {
+        await createAppointment(appointment as IAppointment)
+        toastMsg = ToastMessages.createAppointmentSuccess;
+      }
+
+      toast(getToastMessage(toastMsg))
 
     } catch (error) {
       console.error(error)
-      toast(getToastMessage(ToastMessages.createAppointmentError))
+      toast(getToastMessage(ToastMessages.genericError))
     }
+    resetAppointmentAction()
   }
 
   const onAppointmentClick = (event: EventClickArg) => {
-    // ** necesito los appointments, no los events, revisar cómo obtenerlos y tenerlos parseados sin tener que hacer un .map a cada render
-    console.log({event});
+    const clickedEvent = event.event._def;
+    const clickedAppointment = appointments?.find(({ _id }) => _id === clickedEvent.publicId);
+    if (!clickedAppointment) return
 
-    // ** convertir a IAppointmentForm
+    const { patient, day, startTime, endTime, treatment } = clickedAppointment
+    const appointmentPatient = patients?.find(({ _id }) => _id === patient)
 
-    // const appointmentForm: IAppointmentForm = {
-    //   patient: { label: string, value: string }
-    //   day: Date
-    //   startTime: string
-    //   endTime: string
-    //   treatment: string
-    // }
+    const appointmentForm: IAppointmentForm = {
+      patient: { label: `${appointmentPatient?.name} ${appointmentPatient?.lastNames}`, value: patient },
+      day,
+      startTime,
+      endTime,
+      treatment
+    }
 
-    // ** abrir modal con data
+    setSelectedAppointment(appointmentForm)
+    setSelectedAppointmentId(clickedAppointment._id)
+    onModalOpen()
+  }
+
+  const onDeleteAppointment = async () => {
+    try {
+
+      if (!selectedAppointmentId) return
+      await deleteAppointment(selectedAppointmentId)
+      toast(getToastMessage(ToastMessages.deleteAppointmentSuccess))
+
+    } catch (error) {
+      console.error(error)
+      toast(getToastMessage(ToastMessages.genericError))
+    }
+    resetAppointmentAction()
+  }
+
+  const resetAppointmentAction = () => {
+    onDeleteDialogClose()
+    onModalClose()
+    setSelectedAppointment(null)
+    setSelectedAppointmentId(null)
+    refetch()
   }
 
   return (
@@ -89,10 +128,10 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
       <AppointmentCalendar
         onTimeSelect={onTimeSelect}
         onAppointmentClick={onAppointmentClick}
-        events={appointments || []}
+        events={events || []}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+      <Modal isOpen={isFormModalOpen} onClose={onModalClose} closeOnOverlayClick={false}>
         <ModalOverlay />
 
         <ModalContent>
@@ -103,17 +142,30 @@ const AppointmentCalendarContainer: React.FC<Props> = () => {
           <ModalBody>
             <AppointmentForm
               patients={patients || []}
-              isNewAppointment={false}
               onSubmit={onAppointmentSubmit}
               onCancel={() => {
+                setSelectedAppointment(null)
                 setSelectedTime(null)
-                onClose()
+                onModalClose()
               }}
+              onDeleteAppointment={onDeleteDialogOpen}
               selectedTime={selectedTime}
+              clickedAppointment={selectedAppointment}
             />
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <Dialog
+        isOpen={isDeleteDialogOpen}
+        onClose={onDeleteDialogClose}
+        title='Eliminar hora'
+        text='¿Estás seguro de que quieres eliminar la hora agendada?'
+        acceptButtonText='Eliminar'
+        cancelButtonText='Cancelar'
+        acceptButtonColorScheme='red'
+        onAccept={onDeleteAppointment}
+      />
     </>
   );
 };

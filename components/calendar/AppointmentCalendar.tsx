@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { DateSelectArg, EventClickArg, EventSourceInput } from '@fullcalendar/core';
+import { Box } from '@chakra-ui/react';
 
 interface Props extends React.PropsWithChildren {
   onTimeSelect: (selectionInfo: DateSelectArg) => any
@@ -44,7 +45,7 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointm
         center: 'title',
         right: 'today prev,next',
       }}
-      editable={true}
+      // editable={true}
       selectable={true}
       selectMirror={true}
       buttonText={{
@@ -79,11 +80,11 @@ const AppointmentCalendar: React.FC<Props> = ({ onTimeSelect, events, onAppointm
 
 function renderEventContent(eventInfo: { timeText: string, event: any }) {
   return (
-    <>
+    <Box cursor='pointer'>
       <b>{eventInfo.timeText}</b>
       <br />
       <i>{eventInfo.event.title}</i>
-    </>
+    </Box>
   )
 }
 

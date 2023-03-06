@@ -1,7 +1,4 @@
-import {
-  AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent,
-  AlertDialogOverlay, Box, Button,
-  useToast, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, useToast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -14,6 +11,7 @@ import { FiCheckSquare, FiUserX } from 'react-icons/fi'
 import { useRouter } from 'next/router';
 import { createPatient, deletePatient, updatePatient } from '@/clients/patients';
 import { renderFormFields } from '@/helpers/forms';
+import Dialog from '../dialog/Dialog';
 interface Props extends React.PropsWithChildren {
   isNewPatient: boolean
   patientData?: IPatient
@@ -24,7 +22,6 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
   const toast = useToast();
   const router = useRouter()
 
-  const cancelRef = React.useRef(null)
   const schema = yup.object().shape({
     name: yup.string().required('El nombre del paciente es obligatorio'),
     lastNames: yup.string().required('Los apellidos del paciente es obligatorio'),
@@ -126,32 +123,17 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
           }
         </Box>
       </form>
-      <AlertDialog
+
+      <Dialog
         isOpen={isDeleteDialogOpen}
-        leastDestructiveRef={cancelRef}
         onClose={onDeleteDialogClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Eliminar Paciente
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              ¿Estás seguro de que quieres eliminar el registro del paciente? Se perderán sus datos, agenda e historial.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onDeleteDialogClose}>
-                Cancelar
-              </Button>
-              <Button colorScheme='red' onClick={onDelete} ml={3}>
-                Eliminar
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        title='Eliminar Paciente'
+        text='¿Estás seguro de que quieres eliminar el registro del paciente? Se perderán sus datos, agenda e historial.'
+        acceptButtonText='Eliminar'
+        cancelButtonText='Cancelar'
+        acceptButtonColorScheme='red'
+        onAccept={onDelete}
+      />
     </>
   )
 }
