@@ -1,5 +1,5 @@
 import { Box, Button, useToast, useDisclosure } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,15 +12,17 @@ import { useRouter } from 'next/router';
 import { createPatient, deletePatient, updatePatient } from '@/clients/patients';
 import { renderFormFields } from '@/helpers/forms';
 import Dialog from '../dialog/Dialog';
+import { PatientFormSkeleton } from '../skeletons/PatientFormSkeleton';
 interface Props extends React.PropsWithChildren {
   isNewPatient: boolean
   patientData?: IPatient
+  isLoading?: boolean
 }
 
-export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
+export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData, isLoading }) => {
   const { isOpen: isDeleteDialogOpen, onOpen: onDeleteDialogOpen, onClose: onDeleteDialogClose } = useDisclosure()
   const toast = useToast();
-  const router = useRouter()
+  const router = useRouter();
 
   const schema = yup.object().shape({
     name: yup.string().required('El nombre del paciente es obligatorio'),
@@ -107,7 +109,9 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {isLoading
+      ? <PatientFormSkeleton />
+      : <form onSubmit={handleSubmit(onSubmit)}>
 
         {renderFormFields(fields, errors, register, control)}
 
@@ -122,7 +126,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData }) => {
             </Button>
           }
         </Box>
-      </form>
+      </form>}
 
       <Dialog
         isOpen={isDeleteDialogOpen}

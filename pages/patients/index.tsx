@@ -4,9 +4,8 @@ import { IPatient } from "@/interfaces/IPatient";
 import { Alert, AlertIcon, Avatar, Button, Card, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import styles from '@/styles/Patients.module.css'
-import { TableCellsSkeleton } from "@/components/skeletons/TableSkeleton";
+import { TableCellsSkeleton } from "@/components/skeletons/TableCellsSkeleton";
 import { FiUserPlus } from 'react-icons/fi'
-import { getPatients } from "@/clients/patients";
 import { usePatients } from "@/hooks/usePatients";
 
 export default function Patients() {
