@@ -29,7 +29,7 @@ const Patient: React.FC<Props> = () => {
     {
       key: uuid(),
       text: 'Información de paciente',
-      component: <PatientForm patientData={patient} isNewPatient={!!patientId} isLoading={isLoading}/>
+      component: <PatientForm patientData={patient} isNewPatient={isNewPatient} isLoading={isLoading}/>
     },
     { key: uuid(), text: 'Archivos', component: <>Archivos!</> },
     { key: uuid(), text: 'Evolución', component: <>Evolución!</> },
