@@ -14,7 +14,7 @@ interface Props extends React.PropsWithChildren {
   patient?: IPatient,
 }
 
-const Patient: React.FC<Props> = ({ isNewPatient, patient }) => {
+const Content = ({ isNewPatient, patient }: any) => {
   const tabs: { key: string, text: string, component: JSX.Element }[] = [
     { key: uuid(), text: 'Información de paciente', component: <PatientForm patientData={patient} isNewPatient={isNewPatient} /> },
     { key: uuid(), text: 'Archivos', component: <>Archivos!</> },
@@ -38,6 +38,13 @@ const Patient: React.FC<Props> = ({ isNewPatient, patient }) => {
         </Tabs>
       </Card>
     </Layout>
+  )
+}
+
+const Patient: React.FC<Props> = ({ isNewPatient, patient }) => {
+
+  return (
+    <Content isNewPatient={isNewPatient} patient={patient}/>
   );
 };
 
