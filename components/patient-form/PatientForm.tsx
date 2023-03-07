@@ -42,6 +42,7 @@ export const PatientForm: React.FC<Props> = ({ isNewPatient, patientData, isLoad
   const onSubmit = async (data: IPatient) => {
     try {
       if (isNewPatient) {
+        data.treatments = 0;
         const res = await createPatient(data)
         if (res.status === 200) {
           toast(getToastMessage(ToastMessages.createPatientSuccess))
